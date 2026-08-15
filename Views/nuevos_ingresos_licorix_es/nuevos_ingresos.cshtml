@@ -1,0 +1,70 @@
+@model IEnumerable<LICORIX_PROYECT.Models.Producto>
+@{
+    Layout = "_LicorixLayout";
+    ViewData["Title"] = "Nuevos Ingresos - Licorix";
+    var productos = Model.ToList();
+}\n\n<section class="relative h-[614px] md:h-[716px] flex items-center overflow-hidden">
+    <div class="absolute inset-0 z-0 bg-primary-container"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-background via-background/40 to-transparent"></div>
+    <div class="relative z-10 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full">
+        <span class="font-label-caps text-label-caps text-secondary mb-4 block">Recién Llegados</span>
+        <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary max-w-2xl mb-6">La Vanguardia de Nuestra Cava</h1>
+        <p class="font-body-lg text-body-lg text-on-surface-variant max-w-lg mb-8">Descubra las últimas joyas líquidas seleccionadas por nuestros expertos internacionales.</p>
+        <a class="inline-flex items-center gap-2 px-8 py-4 bg-primary text-on-primary font-bold transition-all hover:opacity-90 active:scale-95" href="#new-arrivals">
+            Explorar Novedades
+            <span class="material-symbols-outlined">arrow_downward</span>
+        </a>
+    </div>
+</section>
+
+<section id="new-arrivals" class="py-20 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+    <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+        <div>
+            <h2 class="font-headline-md text-headline-md text-primary mb-2">Ingresos del Mes</h2>
+            <p class="font-body-md text-on-surface-variant">Actualizado: @DateTime.Now.ToString("MMMM yyyy")</p>
+        </div>
+    </div>
+
+    @if (!productos.Any())
+    {
+        <div class="text-center py-16">
+            <span class="material-symbols-outlined text-6xl text-on-surface-variant">inventory_2</span>
+            <p class="font-headline-sm mt-4 text-primary">Aún no hay nuevos ingresos esta semana.</p>
+            <p class="text-on-surface-variant mt-2">Estamos constantemente curando nuevas etiquetas para ti.</p>
+            <a class="inline-block mt-6 bg-primary text-on-primary px-6 py-3 font-label-caps text-label-caps hover:bg-secondary transition-colors" asp-controller="Catalogo" asp-action="Index">VER CATÁLOGO COMPLETO</a>
+        </div>
+    }
+    else
+    {
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-gutter">
+            @foreach (var p in productos)
+            {
+                <div class="group flex flex-col">
+                    <div class="relative aspect-[3/4] bg-surface-container-low mb-4 overflow-hidden">
+                        <a asp-controller="DetalleProducto" asp-action="Index" asp-route-id="@p.IdProducto">
+                            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="@(Url.Content(ImagenHelper.Url(p.ImagenURL, p.Nombre)))" alt="@p.Nombre" />
+                        </a>
+                        <div class="absolute top-4 right-4 bg-secondary-container text-on-secondary-container font-label-caps text-label-caps px-2 py-1">NUEVO</div>
+                        @if (p.Stock > 0)
+                        {
+                            <form asp-controller="Carrito" asp-action="Agregar" method="post">
+                                <input type="hidden" name="id" value="@p.IdProducto" />
+                                <input type="hidden" name="cantidad" value="1" />
+                                <button type="submit" class="absolute bottom-4 right-4 w-10 h-10 bg-surface text-primary border border-primary flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-primary hover:text-on-primary">
+                                    <span class="material-symbols-outlined text-sm">add_shopping_cart</span>
+                                </button>
+                            </form>
+                        }
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <span class="font-label-caps text-label-caps text-on-surface-variant">@p.GraduacionAlcoholica.ToString("F1")% ALC. VOL.</span>
+                        <h3 class="font-headline-sm text-lg text-primary">
+                            <a class="hover:text-secondary transition-colors" asp-controller="DetalleProducto" asp-action="Index" asp-route-id="@p.IdProducto">@p.Nombre</a>
+                        </h3>
+                        <span class="font-bold mt-2 text-primary">S/ @p.Precio.ToString("F2")</span>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</section>

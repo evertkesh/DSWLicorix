@@ -1,0 +1,70 @@
+@model LICORIX_PROYECT.Models.ViewModels.OfertasViewModel
+@{
+    Layout = "_LicorixLayout";
+    ViewData["Title"] = "Ofertas - Licorix";
+}\n\n<section class="relative h-[614px] flex items-center overflow-hidden">
+    <div class="absolute inset-0 z-0">
+        <div class="w-full h-full bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAQvQLNDPvTK5SdHaBQfHAd6u1ZnscVZdbQsOO2kVkQfI29xiHnuGboV9fQqGLCrw1ikrouQfgiIGL7GGjLsUcc9HSMFklXJm2D13qoWuFv-bZyLoHrExY_YFxh8M5qJ1EMmHhK8_28rkDi3yd5WEjY2pWzNUixu_pvtV4O128Bw0GOnw_vH-mJ9puR_c0uzIM_msVsh-vDELdFtOXEefozQ_at4WDv3peE03g99WJz5Zg976rRwKCd')"></div>
+        <div class="absolute inset-0 hero-gradient"></div>
+    </div>
+    <div class="relative z-10 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full">
+        <div class="max-w-2xl">
+            <span class="font-label-caps text-label-caps text-secondary mb-4 block uppercase">Ediciones Limitadas</span>
+            <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-6">Selecciones Premium a Precios Exclusivos</h1>
+            <p class="font-body-lg text-body-lg text-on-surface-variant mb-8">Descubra una colección curada de espirituosos de clase mundial con beneficios exclusivos.</p>
+            <a class="bg-primary text-on-primary px-8 py-4 font-label-caps text-label-caps tracking-widest hover:opacity-90 transition-opacity inline-block" href="#productos">EXPLORAR COLECCIÓN</a>
+        </div>
+    </div>
+</section>
+
+<section id="productos" class="py-12 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12 border-b border-outline-variant pb-8">
+        <div>
+            <h2 class="font-headline-md text-headline-md text-primary mb-2">Ofertas Actuales</h2>
+            <p class="text-on-surface-variant">Mostrando @Model.Total tesoro@(Model.Total == 1 ? "" : "s") seleccionado@(Model.Total == 1 ? "" : "s")</p>
+        </div>
+    </div>
+
+    @if (!Model.Productos.Any())
+    {
+        <div class="text-center py-16">
+            <span class="material-symbols-outlined text-6xl text-on-surface-variant">local_offer</span>
+            <p class="font-headline-sm mt-4 text-primary">No hay ofertas activas en este momento.</p>
+            <p class="text-on-surface-variant mt-2">Vuelve pronto o explora nuestro catálogo completo.</p>
+            <a class="inline-block mt-6 bg-primary text-on-primary px-6 py-3 font-label-caps text-label-caps hover:bg-secondary transition-colors" asp-controller="Catalogo" asp-action="Index">VER CATÁLOGO</a>
+        </div>
+    }
+    else
+    {
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-gutter">
+            @foreach (var o in Model.Productos)
+            {
+                var descuento = o.TipoDescuento == "p" ? $"-{(int)o.ValorDescuento}%" : $"-S/ {o.ValorDescuento:F2}";
+                <div class="group flex flex-col cursor-pointer">
+                    <div class="relative aspect-[3/4] bg-surface-container-low mb-6 overflow-hidden">
+                        <a asp-controller="DetalleProducto" asp-action="Index" asp-route-id="@o.IdProducto">
+                            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="@(Url.Content(ImagenHelper.Url(o.ImagenURL, o.Nombre)))" alt="@o.Nombre" />
+                        </a>
+                        <div class="absolute top-4 right-4 bg-secondary text-on-secondary font-label-caps text-label-caps px-3 py-1">@descuento</div>
+                        <form asp-controller="Carrito" asp-action="Agregar" method="post">
+                            <input type="hidden" name="id" value="@o.IdProducto" />
+                            <input type="hidden" name="cantidad" value="1" />
+                            <button type="submit" class="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-primary/90 text-white font-label-caps text-label-caps tracking-widest py-2">AÑADIR AL CARRITO</button>
+                        </form>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <span class="font-label-caps text-label-caps text-outline uppercase">@o.Categoria</span>
+                        <h3 class="font-headline-sm text-lg text-primary">
+                            <a class="hover:text-secondary transition-colors" asp-controller="DetalleProducto" asp-action="Index" asp-route-id="@o.IdProducto">@o.Nombre</a>
+                        </h3>
+                        <p class="text-xs text-secondary mt-1">@o.Promocion</p>
+                        <div class="flex gap-2 items-baseline mt-2">
+                            <span class="font-bold text-primary text-lg">S/ @o.PrecioConDescuento.ToString("F2")</span>
+                            <span class="line-through text-on-surface-variant text-sm">S/ @o.Precio.ToString("F2")</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</section>

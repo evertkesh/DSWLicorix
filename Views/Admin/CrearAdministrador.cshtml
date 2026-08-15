@@ -1,0 +1,45 @@
+@model LICORIX_PROYECT.Models.Usuario
+@{
+    Layout = "_LicorixLayout";
+    ViewData["Title"] = "Crear Administrador - Admin";
+}
+
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12">
+    <div class="mb-8 flex items-center justify-between">
+        <div>
+            <h1 class="font-headline-md text-headline-md text-primary">Agregar Administrador</h1>
+            <p class="text-on-surface-variant">Crea una cuenta de administrador.</p>
+        </div>
+        <a class="bg-primary text-on-primary px-6 py-3" asp-controller="Admin" asp-action="Usuarios">Volver a Usuarios</a>
+    </div>
+
+    <form asp-controller="Admin" asp-action="CrearAdministrador" method="post">
+        @Html.AntiForgeryToken()
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-sm">Nombres</label>
+                <input name="Nombres" value="@Model?.Nombres" class="w-full border px-3 py-2" />
+            </div>
+            <div>
+                <label class="block text-sm">Apellidos</label>
+                <input name="Apellidos" value="@Model?.Apellidos" class="w-full border px-3 py-2" />
+            </div>
+            <div>
+                <label class="block text-sm">Correo</label>
+                <input name="Correo" value="@Model?.Correo" class="w-full border px-3 py-2" />
+            </div>
+            <div>
+                <label class="block text-sm">Contraseña</label>
+                <input name="Contrasena" value="@Model?.Contrasena" class="w-full border px-3 py-2" />
+            </div>
+            <div class="md:col-span-2">
+                <label class="block text-sm">Teléfono</label>
+                <input name="Telefono" value="@Model?.Telefono" class="w-full border px-3 py-2" />
+            </div>
+        </div>
+
+        <div class="mt-6">
+            <button type="submit" class="bg-primary text-on-primary px-6 py-3">Crear Administrador</button>
+        </div>
+    </form>
+</main>

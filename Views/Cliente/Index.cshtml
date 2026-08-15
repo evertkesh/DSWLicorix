@@ -1,0 +1,46 @@
+@model IEnumerable<LICORIX_PROYECT.Models.Producto>
+@{
+    Layout = "_LicorixLayout";
+    ViewData["Title"] = "Demo API - Cliente";
+    string Placeholder(string nombre) => $"https://placehold.co/600x800/1c1b1b/fed65b?text={Uri.EscapeDataString(nombre)}&font=oswald";
+    string Img(string? url, string nombre) => string.IsNullOrEmpty(url) ? Placeholder(nombre) : url;
+}
+
+<section class="py-16 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+    <div class="mb-12 border-l-4 border-secondary pl-6">
+        <span class="font-label-caps text-label-caps text-secondary block mb-2">DEMO DEL WEB API INTERNO</span>
+        <h1 class="font-headline-md text-headline-md mb-2">ClienteController → /api/productosapi</h1>
+        <p class="text-on-surface-variant font-body-md">Esta vista consume el Web API interno vía <code class="px-2 py-1 bg-surface-container">HttpClient</code>, sin tocar la BD directamente. Patrón recomendado para apps externas (mobile, SPA, integración).</p>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="p-8 bg-red-50 border-l-4 border-red-600">
+            <p class="font-label-caps text-label-caps text-red-700 mb-2">NO SE PUDO CONTACTAR EL API</p>
+            <p class="text-red-900 text-sm">Verifica que el servidor esté corriendo y la base de datos tenga productos activos.</p>
+        </div>
+    }
+    else
+    {
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+            @foreach (var p in Model)
+            {
+                <div class="group">
+                    <div class="relative aspect-[3/4] bg-tertiary-container mb-4 overflow-hidden">
+                        @if (p.Stock > 0)
+                        {
+                            <div class="absolute top-4 right-4 z-10 font-label-caps text-label-caps text-green-700 bg-white/90 px-2 py-1">STOCK</div>
+                        }
+                        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="@Img(p.ImagenURL, p.Nombre)" alt="@p.Nombre" />
+                    </div>
+                    <div class="space-y-1">
+                        <p class="font-label-caps text-label-caps text-on-surface-variant">@(p.GraduacionAlcoholica)% ALC. VOL.</p>
+                        <h3 class="font-headline-sm text-headline-sm">@p.Nombre</h3>
+                        <p class="font-body-md font-bold text-lg">S/ @p.Precio.ToString("F2")</p>
+                    </div>
+                    <a class="w-full mt-4 bg-primary text-on-primary py-3 font-label-caps text-label-caps hover:bg-secondary hover:text-on-secondary transition-colors block text-center" asp-controller="Cliente" asp-action="Detalle" asp-route-id="@p.IdProducto">VER DETALLE</a>
+                </div>
+            }
+        </div>
+    }
+</section>

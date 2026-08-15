@@ -1,0 +1,39 @@
+@model LICORIX_PROYECT.Models.Producto
+@{
+    Layout = "_LicorixLayout";
+    ViewData["Title"] = Model.Nombre;
+    string Img(string? url, string nombre) => string.IsNullOrEmpty(url) ? $"https://placehold.co/600x800/1c1b1b/fed65b?text={Uri.EscapeDataString(nombre)}&font=oswald" : url;
+}
+
+<section class="py-16 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+    <nav class="mb-6 flex gap-2 font-label-caps text-label-caps text-on-surface-variant uppercase">
+        <a class="hover:text-primary" asp-controller="Cliente" asp-action="Index">Cliente</a>
+        <span>/</span>
+        <span class="text-primary">@Model.Nombre</span>
+    </nav>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+        <div class="aspect-[4/5] bg-surface-container-low border border-outline-variant overflow-hidden">
+            <img class="w-full h-full object-cover" src="@Img(Model.ImagenURL, Model.Nombre)" alt="@Model.Nombre" />
+        </div>
+        <div>
+            <h1 class="font-headline-md text-headline-md mb-2">@Model.Nombre</h1>
+            <p class="font-body-md text-on-surface-variant mb-6">@Model.Descripcion</p>
+            <div class="font-display-lg text-display-lg mb-6 text-primary">S/ @Model.Precio.ToString("F2")</div>
+
+            <ul class="space-y-2 mb-8">
+                <li class="flex justify-between border-b border-outline-variant pb-2"><span class="font-label-caps text-on-surface-variant">GRADUACIÓN</span><span class="font-bold">@Model.GraduacionAlcoholica% Vol.</span></li>
+                <li class="flex justify-between border-b border-outline-variant pb-2"><span class="font-label-caps text-on-surface-variant">VOLUMEN</span><span class="font-bold">@Model.VolumenML ml</span></li>
+                <li class="flex justify-between border-b border-outline-variant pb-2"><span class="font-label-caps text-on-surface-variant">STOCK</span><span class="font-bold">@Model.Stock unidades</span></li>
+            </ul>
+
+            <form asp-controller="Carrito" asp-action="Agregar" method="post">
+                <input type="hidden" name="id" value="@Model.IdProducto" />
+                <input type="hidden" name="cantidad" value="1" />
+                <button type="submit" class="w-full bg-primary text-on-primary py-4 font-label-caps text-label-caps hover:bg-secondary hover:text-on-secondary transition-colors">
+                    AÑADIR AL CARRITO
+                </button>
+            </form>
+        </div>
+    </div>
+</section>

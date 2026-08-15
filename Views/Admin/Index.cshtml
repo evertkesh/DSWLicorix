@@ -1,0 +1,58 @@
+@{
+    Layout = "_LicorixLayout";
+    ViewData["Title"] = "Panel Admin - Licorix";
+}
+
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12">
+    <div class="mb-6">
+        <span class="font-label-caps text-label-caps text-secondary mb-2 block">PANEL DE ADMINISTRACIÓN</span>
+        <h1 class="font-headline-md text-headline-md text-primary mb-2">Bienvenido, Administrador</h1>
+        <p class="font-body-md text-on-surface-variant">Gestiona el stock, eventos y ofertas de Licorix.</p>
+
+        <div class="mt-6 flex flex-wrap gap-3">
+            <a class="bg-primary text-on-primary px-5 py-3 font-label-caps text-label-caps rounded hover:bg-secondary transition-colors" asp-controller="Admin" asp-action="Stock">Gestionar Stock</a>
+            <a class="bg-primary text-on-primary px-5 py-3 font-label-caps text-label-caps rounded hover:bg-secondary transition-colors" asp-controller="Admin" asp-action="Ofertas">Gestionar Ofertas</a>
+            <a class="bg-primary text-on-primary px-5 py-3 font-label-caps text-label-caps rounded hover:bg-secondary transition-colors" asp-controller="Admin" asp-action="Eventos">Gestionar Eventos</a>
+            <a class="bg-secondary text-on-secondary px-5 py-3 font-label-caps text-label-caps rounded hover:opacity-90 transition-opacity" asp-controller="Admin" asp-action="Usuarios">Gestionar Administradores</a>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-12">
+        <div class="bg-surface-container-low p-8 border border-outline-variant">
+            <span class="material-symbols-outlined text-primary text-3xl">inventory_2</span>
+            <p class="font-label-caps text-label-caps text-on-surface-variant mt-4">TOTAL PRODUCTOS</p>
+            <p class="font-headline-md text-headline-md text-primary">@ViewBag.TotalProductos</p>
+            <p class="text-sm text-on-surface-variant">@ViewBag.TotalStock unidades en stock</p>
+            <a class="inline-block mt-4 text-secondary font-label-caps text-label-caps uppercase hover:underline" asp-controller="Admin" asp-action="Stock">Gestionar stock &rarr;</a>
+        </div>
+        <div class="bg-surface-container-low p-8 border border-outline-variant">
+            <span class="material-symbols-outlined text-primary text-3xl">event</span>
+            <p class="font-label-caps text-label-caps text-on-surface-variant mt-4">EVENTOS</p>
+            <p class="font-headline-md text-headline-md text-primary">Activos</p>
+            <p class="text-sm text-on-surface-variant">Crea, activa o desactiva eventos</p>
+            <a class="inline-block mt-4 text-secondary font-label-caps text-label-caps uppercase hover:underline" asp-controller="Admin" asp-action="Eventos">Gestionar eventos &rarr;</a>
+        </div>
+        <div class="bg-surface-container-low p-8 border border-outline-variant">
+            <span class="material-symbols-outlined text-primary text-3xl">local_offer</span>
+            <p class="font-label-caps text-label-caps text-on-surface-variant mt-4">PROMOCIONES</p>
+            <p class="font-headline-md text-headline-md text-primary">@ViewBag.TotalPromos</p>
+            <p class="text-sm text-on-surface-variant">Ofertas activas y desactivadas</p>
+            <a class="inline-block mt-4 text-secondary font-label-caps text-label-caps uppercase hover:underline" asp-controller="Admin" asp-action="Ofertas">Gestionar ofertas &rarr;</a>
+        </div>
+        <div class="bg-surface-container-low p-8 border border-outline-variant">
+            <span class="material-symbols-outlined text-primary text-3xl">people</span>
+            <p class="font-label-caps text-label-caps text-on-surface-variant mt-4">USUARIOS</p>
+            <p class="font-headline-md text-headline-md text-primary">@ViewBag.TotalAdmins</p>
+            <p class="text-sm text-on-surface-variant">Administradores activos</p>
+            <a class="inline-block mt-4 text-secondary font-label-caps text-label-caps uppercase hover:underline" asp-controller="Admin" asp-action="Usuarios">Gestionar usuarios &rarr;</a>
+        </div>
+    </div>
+
+    <div class="bg-primary text-on-primary p-12 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div>
+            <h2 class="font-headline-md text-headline-md mb-2">¿Necesitas ajustar el inventario?</h2>
+            <p class="font-body-md opacity-90">Usa el botón "Poner en stock" para reponer cualquier producto agotado.</p>
+        </div>
+        <a class="bg-secondary text-on-secondary px-8 py-4 font-label-caps text-label-caps tracking-widest hover:opacity-90 transition-opacity" asp-controller="Admin" asp-action="Stock">IR A STOCK</a>
+    </div>
+</main>

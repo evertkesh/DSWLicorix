@@ -1,0 +1,195 @@
+@model LICORIX_PROYECT.Models.ViewModels.InicioViewModel
+@{
+    Layout = "_LicorixLayout";
+    ViewData["Title"] = "Licorix | Spirits Premium";
+}\n\n<section class="relative w-full h-[716px] md:h-[870px] overflow-hidden bg-primary-container">
+    <div class="absolute inset-0 opacity-80" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDPfLnnQxofL9PhibzYzdBX7rCvGkv5Plw6_KHIVMIuYtheD6Ge43yJU_HY9A9GSJ2hm2sC7zcy8axiPL7ox6HmikYamPj4ORslsdE-5ZNvWh29evssGsqLHplbKG3OuSFkOgbdPjeeRv4Dil34tpDljmvt2CDDxfl02sBmpFUsg2Ku8PJbYt5SdJIQpqloJcmQsqHMjiD3_m_UWOzT5_j8eZLEs3zAYnjCnWhijqHvq83nhyNzU9dA')"></div>
+    <div class="relative h-full flex flex-col justify-center items-start px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto text-on-primary">
+        <span class="font-label-caps text-label-caps text-secondary-container mb-4">EDICIÓN LIMITADA</span>
+        <h1 class="font-display-lg text-display-lg-mobile md:text-7xl mb-6 max-w-2xl leading-tight">Vinos para el Invierno: Selección Curada</h1>
+        <p class="font-body-lg text-body-lg mb-8 max-w-xl opacity-90">Descubre etiquetas exclusivas de bodegas boutique, seleccionadas para acompañar las noches más frías del año con notas profundas y complejas.</p>
+        <div class="flex gap-4">
+            <a class="bg-primary text-on-primary px-10 py-4 font-label-caps text-label-caps border border-primary hover:bg-transparent hover:text-primary transition-all duration-300" asp-controller="Catalogo" asp-action="Index">EXPLORAR SELECCIÓN</a>
+            <a class="border border-on-primary text-on-primary px-10 py-4 font-label-caps text-label-caps hover:bg-on-primary hover:text-primary-container transition-all duration-300" asp-controller="Ofertas" asp-action="Index">VER OFERTAS</a>
+        </div>
+    </div>
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-3">
+        <div class="w-12 h-1 bg-on-primary"></div>
+        <div class="w-12 h-1 bg-on-primary/30"></div>
+        <div class="w-12 h-1 bg-on-primary/30"></div>
+    </div>
+</section>\n\n@if (Model.Eventos.Any())
+{
+    <section class="event-banner-carousel bg-surface-container-low py-16" data-event-carousel data-interval="5000" aria-label="Carrusel de próximos eventos">
+        <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
+                <div>
+                    <span class="font-label-caps text-label-caps text-secondary">AGENDA LICORIX</span>
+                    <h2 class="font-headline-md text-headline-md mt-2">Próximos eventos y catas</h2>
+                    <p class="font-body-md text-on-surface-variant mt-2 max-w-2xl">Reserva experiencias exclusivas; el banner cambia automáticamente cada cierto tiempo para mostrarte la agenda destacada.</p>
+                </div>
+                <a class="font-label-caps text-label-caps border-b border-primary pb-1 self-start md:self-auto" asp-controller="Eventos" asp-action="Index">VER TODOS LOS EVENTOS</a>
+            </div>
+
+            <div class="relative overflow-hidden bg-primary-container text-on-primary shadow-xl">
+                <div class="event-carousel-track flex transition-transform duration-700 ease-in-out">
+                    @foreach (var evento in Model.Eventos)
+                    {
+                        <article class="event-carousel-slide min-w-full grid grid-cols-1 lg:grid-cols-2" aria-label="@evento.Titulo">
+                            <div class="relative h-80 lg:h-[430px] overflow-hidden">
+                                <img class="absolute inset-0 w-full h-full object-cover" src="@evento.ImagenURL" alt="@evento.Titulo" />
+                                <div class="absolute inset-0 bg-black/25"></div>
+                            </div>
+                            <div class="p-8 md:p-12 flex flex-col justify-center">
+                                <span class="font-label-caps text-label-caps text-secondary-container mb-4">@evento.Categoria</span>
+                                <h3 class="font-display-lg text-4xl md:text-5xl mb-4 leading-tight">@evento.Titulo</h3>
+                                <p class="font-body-md text-body-md text-on-primary-container/90 mb-6">@evento.Descripcion</p>
+                                <div class="grid sm:grid-cols-3 gap-4 mb-8 text-on-primary-container">
+                                    <div class="flex items-center gap-2"><span class="material-symbols-outlined">event</span><span>@evento.Fecha.ToString("dd MMM yyyy")</span></div>
+                                    <div class="flex items-center gap-2"><span class="material-symbols-outlined">schedule</span><span>@evento.Hora</span></div>
+                                    <div class="flex items-center gap-2"><span class="material-symbols-outlined">groups</span><span>@evento.PlazasRestantes plazas</span></div>
+                                </div>
+                                <a class="inline-flex w-fit items-center gap-2 bg-secondary text-on-secondary px-8 py-3 font-label-caps text-label-caps hover:bg-white hover:text-primary transition-colors" asp-controller="Eventos" asp-action="Index">RESERVAR EVENTO <span class="material-symbols-outlined">arrow_forward</span></a>
+                            </div>
+                        </article>
+                    }
+                </div>
+
+                <button type="button" class="event-carousel-prev absolute left-4 top-1/2 -translate-y-1/2 bg-white/85 text-primary w-11 h-11 flex items-center justify-center hover:bg-secondary hover:text-on-secondary transition-colors" aria-label="Evento anterior">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </button>
+                <button type="button" class="event-carousel-next absolute right-4 top-1/2 -translate-y-1/2 bg-white/85 text-primary w-11 h-11 flex items-center justify-center hover:bg-secondary hover:text-on-secondary transition-colors" aria-label="Evento siguiente">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                </button>
+                <div class="event-carousel-dots absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2" aria-label="Indicadores de eventos"></div>
+            </div>
+        </div>
+    </section>
+}\n\n<section class="py-20 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+    <div class="flex justify-between items-end mb-12">
+        <div>
+            <h2 class="font-headline-md text-headline-md mb-2">Destacados del Mes</h2>
+            <p class="text-on-surface-variant font-body-md">Las piezas maestras que definen nuestra cava esta temporada.</p>
+        </div>
+        <a class="font-label-caps text-label-caps border-b border-primary pb-1 hidden md:block" asp-controller="Catalogo" asp-action="Index">VER TODOS</a>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+        @foreach (var p in Model.Destacados)
+        {
+            <div class="group">
+                <div class="relative aspect-[3/4] bg-tertiary-container mb-4 overflow-hidden">
+                    @if (p.Stock > 0)
+                    {
+                        <div class="absolute top-4 right-4 z-10 font-label-caps text-label-caps text-green-700 bg-white/90 px-2 py-1">EN STOCK</div>
+                    }
+                    <a asp-controller="DetalleProducto" asp-action="Index" asp-route-id="@p.IdProducto">
+                        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="@(Url.Content(ImagenHelper.Url(p.ImagenURL, p.Nombre)))" alt="@p.Nombre" />
+                    </a>
+                </div>
+                <div class="space-y-1">
+                    <p class="font-label-caps text-label-caps text-on-surface-variant">@p.GraduacionAlcoholica.ToString("F1")% ALC. VOL.</p>
+                    <h3 class="font-headline-sm text-headline-sm">
+                        <a class="hover:text-secondary transition-colors" asp-controller="DetalleProducto" asp-action="Index" asp-route-id="@p.IdProducto">@p.Nombre</a>
+                    </h3>
+                    <p class="font-body-md font-bold text-lg">S/ @p.Precio.ToString("F2")</p>
+                </div>
+                <form asp-controller="Carrito" asp-action="Agregar" method="post">
+                    <input type="hidden" name="id" value="@p.IdProducto" />
+                    <input type="hidden" name="cantidad" value="1" />
+                    <button type="submit" class="w-full mt-4 bg-primary text-on-primary py-3 font-label-caps text-label-caps hover:bg-secondary hover:text-on-secondary transition-colors">AÑADIR AL CARRITO</button>
+                </form>
+            </div>
+        }
+    </div>
+</section>\n\n<section class="py-10 bg-surface-container-low">
+    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-20">
+        <h2 class="font-headline-md text-headline-md mb-12 text-center">Explora por Categoría</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 h-[800px] md:h-[600px]">
+            @{
+                
+                var cat1 = Model.Categorias.FirstOrDefault(c => c.Nombre.Contains("Whisky")) ?? Model.Categorias.ElementAtOrDefault(0);
+                var cat2 = Model.Categorias.FirstOrDefault(c => c.Nombre.Contains("Vino")) ?? Model.Categorias.ElementAtOrDefault(1);
+                var cat3 = Model.Categorias.FirstOrDefault(c => c.Nombre.Contains("Cerveza")) ?? Model.Categorias.ElementAtOrDefault(2);
+            }
+            @if (cat1 != null)
+            {
+                <a class="relative group overflow-hidden md:row-span-2" asp-controller="Catalogo" asp-action="Index" asp-route-idCategoria="@cat1.IdCategoria">
+                    <div class="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-all duration-500 z-10"></div>
+                    <img class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="@(Url.Content(ImagenHelper.Url(cat1.ImagenURL, cat1.Nombre)))" alt="@cat1.Nombre" />
+                    <div class="absolute bottom-8 left-8 z-20">
+                        <h3 class="font-display-lg text-on-primary mb-2">@cat1.Nombre</h3>
+                        <p class="font-label-caps text-label-caps text-secondary-fixed">DESCUBRIR SELECCIÓN</p>
+                    </div>
+                </a>
+            }
+            @if (cat2 != null)
+            {
+                <a class="relative group overflow-hidden md:col-span-2" asp-controller="Catalogo" asp-action="Index" asp-route-idCategoria="@cat2.IdCategoria">
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-all duration-500 z-10"></div>
+                    <img class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="@(Url.Content(ImagenHelper.Url(cat2.ImagenURL, cat2.Nombre)))" alt="@cat2.Nombre" />
+                    <div class="absolute bottom-8 left-8 z-20">
+                        <h3 class="font-display-lg text-on-primary mb-2">@cat2.Nombre</h3>
+                        <p class="font-label-caps text-label-caps text-secondary-fixed">CATÁLOGO COMPLETO</p>
+                    </div>
+                </a>
+            }
+            @if (cat3 != null)
+            {
+                <a class="relative group overflow-hidden md:col-span-2" asp-controller="Catalogo" asp-action="Index" asp-route-idCategoria="@cat3.IdCategoria">
+                    <div class="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-all duration-500 z-10"></div>
+                    <img class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="@(Url.Content(ImagenHelper.Url(cat3.ImagenURL, cat3.Nombre)))" alt="@cat3.Nombre" />
+                    <div class="absolute bottom-8 left-8 z-20">
+                        <h3 class="font-display-lg text-on-primary mb-2">@cat3.Nombre</h3>
+                        <p class="font-label-caps text-label-caps text-secondary-fixed">BODEGAS EXCLUSIVAS</p>
+                    </div>
+                </a>
+            }
+        </div>
+    </div>
+</section>\n\n<section class="py-24 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+    <div class="text-center mb-16">
+        <h2 class="font-headline-md text-headline-md mb-4">Aprende a Mezclar</h2>
+        <p class="text-on-surface-variant max-w-2xl mx-auto">Domina el arte de la coctelería con nuestras guías paso a paso. Recetas diseñadas por expertos para elevar tu experiencia en casa.</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <article class="flex flex-col">
+            <div class="mb-6 overflow-hidden aspect-video">
+                <img class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" src="https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=900" alt="El Negroni Perfecto" />
+            </div>
+            <span class="font-label-caps text-label-caps text-secondary mb-2">CLÁSICOS REINVENTADOS</span>
+            <h3 class="font-headline-sm text-headline-sm mb-4">El Negroni Perfecto: Equilibrio y Carácter</h3>
+            <p class="text-on-surface-variant font-body-md mb-6 flex-grow">Aprende los secretos para balancear el amargor del Campari con un Gin de alta gama.</p>
+            <div class="flex items-center gap-3 py-4 border-t border-outline-variant">
+                <span class="material-symbols-outlined text-primary">local_bar</span>
+                <span class="font-label-caps text-label-caps">USA: BOTELLA PREMIUM</span>
+            </div>
+            <a class="mt-4 font-label-caps text-label-caps flex items-center gap-2 group" asp-controller="Catalogo" asp-action="Index">VER PRODUCTOS <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span></a>
+        </article>
+        <article class="flex flex-col">
+            <div class="mb-6 overflow-hidden aspect-video">
+                <img class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" src="https://images.unsplash.com/photo-1527281400683-1aae777175f8?w=900" alt="Old Fashioned Ahumado" />
+            </div>
+            <span class="font-label-caps text-label-caps text-secondary mb-2">NOTAS AHUMADAS</span>
+            <h3 class="font-headline-sm text-headline-sm mb-4">Old Fashioned con un Toque Ahumado</h3>
+            <p class="text-on-surface-variant font-body-md mb-6 flex-grow">Cómo usar maderas aromáticas para elevar la profundidad de un buen Bourbon.</p>
+            <div class="flex items-center gap-3 py-4 border-t border-outline-variant">
+                <span class="material-symbols-outlined text-primary">local_bar</span>
+                <span class="font-label-caps text-label-caps">WHISKY SINGLE MALT</span>
+            </div>
+            <a class="mt-4 font-label-caps text-label-caps flex items-center gap-2 group" asp-controller="Catalogo" asp-action="Index">VER PRODUCTOS <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span></a>
+        </article>
+        <article class="flex flex-col">
+            <div class="mb-6 overflow-hidden aspect-video">
+                <img class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=900" alt="Gin &amp; Tonic Botánico" />
+            </div>
+            <span class="font-label-caps text-label-caps text-secondary mb-2">TÉCNICA BOTÁNICA</span>
+            <h3 class="font-headline-sm text-headline-sm mb-4">G&amp;T: Más allá del limón y el hielo</h3>
+            <p class="text-on-surface-variant font-body-md mb-6 flex-grow">Descubre cómo los botánicos frescos pueden transformar radicalmente tu copa.</p>
+            <div class="flex items-center gap-3 py-4 border-t border-outline-variant">
+                <span class="material-symbols-outlined text-primary">local_bar</span>
+                <span class="font-label-caps text-label-caps">CATA BOTÁNICA</span>
+            </div>
+            <a class="mt-4 font-label-caps text-label-caps flex items-center gap-2 group" asp-controller="Eventos" asp-action="Index">VER EVENTOS <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span></a>
+        </article>
+    </div>
+</section>

@@ -1,0 +1,103 @@
+## .NET / Visual Studio / Rider gitignore
+
+# Build results
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Ll]og/
+[Ll]ogs/
+[Ll]og[Ll]ist/
+
+# Visual Studio / Rider files
+.vs/
+.idea/
+.vscode/
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+*.userprefs
+
+# .NET Core / SDK
+project.lock.json
+project.fragment.lock.json
+artifacts/
+**/Properties/launchSettings.json
+**/Properties/PublishProfiles/
+
+# NuGet
+*.nupkg
+*.snupkg
+**/[Nn]uGet.exe
+**/[Nn]uGet/
+**/[Nn]uGet/[Cc]onfig/
+**/[Nn]uGet/[Oo]ther/
+**/[Nn]uGet/[Pp]ackages/
+!**/[Nn]uGet/[Pp]ackage.config
+
+# Test results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.coverage
+*.coveragexml
+coverage*.json
+coverage*.xml
+coverage*.info
+
+# .NET CLI
+*.binlog
+.vscode-test/
+
+# ASP.NET Core
+appsettings.*.local.json
+secrets.json
+secrets.*.json
+appsettings.Local.json
+appsettings.Development.json
+
+# Publish / output
+*.pubxml
+*.pubxml.user
+publish/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+$RECYCLE.BIN/
+$RECYCLE.BIN/
+
+# Temp / cache
+*.tmp
+*~
+*.swp
+.cache/
+*.bak
+
+# Rider / ReSharper
+*.[Rr]e[Ss]harper*
+_ReSharper*/
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# Azure / VS Publish profiles
+*.azurepubxml
+*.azurepubxml.user
+
+# Misc
+*.swp
+*.swo
+*.stackdump
+/.vs/config/applicationhost.config

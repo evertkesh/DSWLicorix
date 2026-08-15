@@ -1,0 +1,85 @@
+@model LICORIX_PROYECT.Models.ViewModels.LoginViewModel
+@{
+    Layout = "_LicorixLayout";
+    ViewData["Title"] = "Iniciar Sesión";
+}
+
+<section class="py-16 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-center min-h-[70vh]">
+        
+        <div class="md:col-span-6 hidden md:block">
+            <span class="font-label-caps text-label-caps text-secondary mb-4 block">BIENVENIDO DE VUELTA</span>
+            <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-6 leading-tight">El arte de la<br />curaduría líquida.</h1>
+            <p class="font-body-lg text-body-lg text-on-surface-variant mb-8 max-w-md">Accede a tu cuenta para gestionar pedidos, descubrir lanzamientos exclusivos y mantener un registro de tus etiquetas favoritas.</p>
+            <div class="flex items-center gap-6 py-6 border-t border-outline-variant">
+                <div>
+                    <span class="material-symbols-outlined text-primary mb-2 block text-3xl">verified</span>
+                    <p class="font-label-caps text-label-caps text-on-surface-variant">ORIGEN<br />CERTIFICADO</p>
+                </div>
+                <div>
+                    <span class="material-symbols-outlined text-primary mb-2 block text-3xl">local_shipping</span>
+                    <p class="font-label-caps text-label-caps text-on-surface-variant">ENVÍO<br />PREMIUM 24H</p>
+                </div>
+                <div>
+                    <span class="material-symbols-outlined text-primary mb-2 block text-3xl">workspace_premium</span>
+                    <p class="font-label-caps text-label-caps text-on-surface-variant">ACCESO<br />EXCLUSIVO</p>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="md:col-span-6 lg:col-span-5 md:col-start-8">
+            <div class="bg-surface-container-lowest border border-outline-variant p-8 md:p-12">
+                <h2 class="font-headline-md text-headline-md text-primary mb-2">Iniciar Sesión</h2>
+                <p class="text-on-surface-variant font-body-md mb-8">Ingresa con tus credenciales de Licorix.</p>
+
+                @if (!string.IsNullOrEmpty(Model.MensajeError))
+                {
+                    <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-600 flex items-start gap-3">
+                        <span class="material-symbols-outlined text-red-700">error</span>
+                        <span class="text-red-900 font-body-md">@Model.MensajeError</span>
+                    </div>
+                }
+
+                <form asp-controller="Cuenta" asp-action="Login" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="ReturnUrl" />
+
+                    <div class="space-y-1 mb-6">
+                        <label asp-for="Correo" class="font-label-caps text-label-caps text-on-surface-variant"></label>
+                        <input asp-for="Correo" type="email" class="w-full border-0 border-b border-outline-variant bg-transparent py-2 focus:border-primary transition-colors" />
+                        <span asp-validation-for="Correo" class="text-error text-sm"></span>
+                    </div>
+
+                    <div class="space-y-1 mb-6">
+                        <label asp-for="Contrasena" class="font-label-caps text-label-caps text-on-surface-variant"></label>
+                        <input asp-for="Contrasena" type="password" class="w-full border-0 border-b border-outline-variant bg-transparent py-2 focus:border-primary transition-colors" />
+                        <span asp-validation-for="Contrasena" class="text-error text-sm"></span>
+                    </div>
+
+                    <div class="flex items-center justify-between mb-8 text-sm">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" class="w-4 h-4 border-primary text-primary focus:ring-secondary rounded-none" />
+                            <span class="font-body-md">Recordarme</span>
+                        </label>
+                        <a href="#" class="font-body-md text-on-surface-variant hover:text-primary transition-colors">¿Olvidaste tu contraseña?</a>
+                    </div>
+
+                    <button type="submit" class="w-full bg-primary text-on-primary py-4 font-label-caps text-label-caps hover:bg-secondary hover:text-on-secondary transition-colors">
+                        INICIAR SESIÓN
+                    </button>
+
+                    <div class="text-center mt-6 text-sm font-body-md text-on-surface-variant">
+                        ¿No tienes cuenta?
+                        <a asp-controller="Cuenta" asp-action="Registro" class="text-primary font-bold hover:underline ml-1">Crear cuenta</a>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

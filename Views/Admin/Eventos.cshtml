@@ -1,0 +1,98 @@
+@model List<LICORIX_PROYECT.Controllers.EventoAdmin>
+@{
+    Layout = "_LicorixLayout";
+    ViewData["Title"] = "Gestión de Eventos - Admin";
+}
+
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12">
+    <div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+            <span class="font-label-caps text-label-caps text-secondary mb-2 block">ADMIN</span>
+            <h1 class="font-headline-md text-headline-md text-primary">Gestión de Eventos</h1>
+            <p class="font-body-md text-on-surface-variant mt-1">Agrega, activa o desactiva eventos de la tienda.</p>
+        </div>
+        <a class="bg-primary text-on-primary px-6 py-3 font-label-caps text-label-caps tracking-widest hover:bg-secondary transition-colors" asp-controller="Admin" asp-action="Index">&larr; Volver al panel</a>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+        <div class="lg:col-span-2">
+            <div class="space-y-4">
+                @foreach (var e in Model)
+                {
+                    <div class="bg-surface-container-lowest border @(e.Activo ? "border-outline-variant" : "border-red-400 opacity-60") p-6 flex flex-col md:flex-row gap-4">
+                        <img src="@e.ImagenURL" class="w-full md:w-40 h-32 object-cover" alt="@e.Titulo" />
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="font-headline-sm text-lg text-primary">@e.Titulo</h3>
+                                    <p class="text-sm text-on-surface-variant mt-1">@e.Descripcion</p>
+                                    <p class="text-xs text-on-surface-variant mt-2">
+                                        <span class="material-symbols-outlined text-sm align-middle">calendar_today</span>
+                                        @e.Fecha.ToString("dd MMM yyyy") a las @e.Hora · @e.Lugar
+                                    </p>
+                                    <p class="text-xs text-on-surface-variant">@e.PlazasRestantes plazas · @(e.Activo ? "Activo" : "Desactivado")</p>
+                                </div>
+                            </div>
+                        </div>
+                        <form asp-controller="Admin" asp-action="ToggleEvento" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@e.Id" />
+                            <button type="submit" class="@(e.Activo ? "bg-error text-on-error hover:opacity-90" : "bg-secondary text-on-secondary hover:opacity-90") px-4 py-2 font-label-caps text-label-caps uppercase text-xs">
+                                @(e.Activo ? "Desactivar" : "Activar")
+                            </button>
+                        </form>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div>
+            <div class="bg-surface-container-low border border-outline-variant p-6">
+                <h2 class="font-headline-sm text-headline-sm text-primary mb-4">Agregar evento</h2>
+                <form asp-controller="Admin" asp-action="AgregarEvento" method="post" class="space-y-3">
+                    @Html.AntiForgeryToken()
+                    <div>
+                        <label class="font-label-caps text-label-caps text-on-surface-variant">Título</label>
+                        <input type="text" name="Titulo" required class="w-full border border-outline-variant bg-transparent py-2 px-3" />
+                    </div>
+                    <div>
+                        <label class="font-label-caps text-label-caps text-on-surface-variant">Descripción</label>
+                        <textarea name="Descripcion" rows="3" class="w-full border border-outline-variant bg-transparent py-2 px-3"></textarea>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="font-label-caps text-label-caps text-on-surface-variant">Fecha</label>
+                            <input type="date" name="Fecha" required class="w-full border border-outline-variant bg-transparent py-2 px-3" />
+                        </div>
+                        <div>
+                            <label class="font-label-caps text-label-caps text-on-surface-variant">Hora</label>
+                            <input type="time" name="Hora" value="19:00" required class="w-full border border-outline-variant bg-transparent py-2 px-3" />
+                        </div>
+                    </div>
+                    <div>
+                        <label class="font-label-caps text-label-caps text-on-surface-variant">Lugar</label>
+                        <input type="text" name="Lugar" class="w-full border border-outline-variant bg-transparent py-2 px-3" />
+                    </div>
+                    <div>
+                        <label class="font-label-caps text-label-caps text-on-surface-variant">Categoría</label>
+                        <select name="Categoria" class="w-full border border-outline-variant bg-transparent py-2 px-3">
+                            <option value="Cata Presencial">Cata Presencial</option>
+                            <option value="Taller Coctelería">Taller Coctelería</option>
+                            <option value="Lanzamiento">Lanzamiento</option>
+                            <option value="Experiencia">Experiencia</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="font-label-caps text-label-caps text-on-surface-variant">Plazas</label>
+                        <input type="number" name="PlazasRestantes" value="10" min="0" class="w-full border border-outline-variant bg-transparent py-2 px-3" />
+                    </div>
+                    <div>
+                        <label class="font-label-caps text-label-caps text-on-surface-variant">URL imagen</label>
+                        <input type="text" name="ImagenURL" class="w-full border border-outline-variant bg-transparent py-2 px-3" />
+                    </div>
+                    <button type="submit" class="w-full bg-primary text-on-primary py-3 font-label-caps text-label-caps uppercase tracking-widest hover:bg-secondary transition-colors">Agregar evento</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>

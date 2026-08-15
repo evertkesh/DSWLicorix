@@ -1,0 +1,77 @@
+@model List<LICORIX_PROYECT.Models.Promocion>
+@{
+    Layout = "_LicorixLayout";
+    ViewData["Title"] = "Gestión de Ofertas - Admin";
+}
+
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12">
+    <div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+            <span class="font-label-caps text-label-caps text-secondary mb-2 block">ADMIN</span>
+            <h1 class="font-headline-md text-headline-md text-primary">Gestión de Ofertas / Promociones</h1>
+            <p class="font-body-md text-on-surface-variant mt-1">Activa o desactiva las promociones vigentes en la tienda.</p>
+        </div>
+        <div class="flex items-center gap-4">
+            <a class="bg-secondary text-on-secondary px-6 py-3 font-label-caps text-label-caps tracking-widest hover:bg-secondary/90 transition-colors" asp-controller="Admin" asp-action="CrearOferta">Crear Promoción</a>
+            <a class="bg-primary text-on-primary px-6 py-3 font-label-caps text-label-caps tracking-widest hover:bg-secondary transition-colors" asp-controller="Admin" asp-action="Index">&larr; Volver al panel</a>
+        </div>
+    </div>
+
+    <div class="overflow-x-auto bg-surface-container-lowest border border-outline-variant">
+        <table class="w-full text-left">
+            <thead class="bg-primary text-on-primary">
+                <tr>
+                    <th class="py-4 px-6 font-label-caps text-label-caps uppercase tracking-widest">Promoción</th>
+                    <th class="py-4 px-6 font-label-caps text-label-caps uppercase tracking-widest text-center">Descuento</th>
+                    <th class="py-4 px-6 font-label-caps text-label-caps uppercase tracking-widest text-center">Vigencia</th>
+                    <th class="py-4 px-6 font-label-caps text-label-caps uppercase tracking-widest text-center">Estado</th>
+                    <th class="py-4 px-6 font-label-caps text-label-caps uppercase tracking-widest text-center">Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var p in Model)
+                {
+                    <tr class="border-b border-outline-variant @(p.Estado ? "" : "opacity-60 bg-red-50")">
+                        <td class="py-4 px-6">
+                            <p class="font-body-md text-body-md font-bold text-primary">@p.Nombre</p>
+                            <p class="text-xs text-on-surface-variant">@p.Descripcion</p>
+                        </td>
+                        <td class="py-4 px-6 text-center font-body-md text-body-md font-bold">
+                            @(p.TipoDescuento == "p" ? $"-{(int)p.ValorDescuento}%" : $"-S/ {p.ValorDescuento:F2}")
+                        </td>
+                        <td class="py-4 px-6 text-center text-sm">
+                            @p.FechaInicio.ToString("dd/MM/yyyy")<br />al @p.FechaFin.ToString("dd/MM/yyyy")
+                        </td>
+                        <td class="py-4 px-6 text-center">
+                            @if (p.Estado)
+                            {
+                                <span class="bg-green-100 text-green-800 px-3 py-1 font-label-caps text-label-caps uppercase text-xs">Activa</span>
+                            }
+                            else
+                            {
+                                <span class="bg-red-100 text-red-800 px-3 py-1 font-label-caps text-label-caps uppercase text-xs">Inactiva</span>
+                            }
+                        </td>
+                        <td class="py-4 px-6 text-center">
+                            <div class="inline-flex items-center gap-2">
+                                <a class="bg-secondary text-on-secondary px-3 py-1 font-label-caps text-label-caps uppercase text-xs" asp-controller="Admin" asp-action="EditarOferta" asp-route-id="@p.IdPromocion">Editar</a>
+                                <form asp-controller="Admin" asp-action="EliminarOferta" method="post" class="inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@p.IdPromocion" />
+                                    <button type="submit" class="bg-error text-on-error px-3 py-1 font-label-caps text-label-caps uppercase text-xs">Eliminar</button>
+                                </form>
+                                <form asp-controller="Admin" asp-action="ToggleOferta" method="post" class="inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@p.IdPromocion" />
+                                    <button type="submit" class="@(p.Estado ? "bg-error text-on-error hover:opacity-90" : "bg-secondary text-on-secondary hover:opacity-90") px-4 py-2 font-label-caps text-label-caps uppercase text-xs">
+                                        @(p.Estado ? "Desactivar" : "Activar")
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</main>

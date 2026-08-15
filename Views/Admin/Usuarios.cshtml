@@ -1,0 +1,133 @@
+@model List<LICORIX_PROYECT.Models.Usuario>
+@{
+    Layout = "_LicorixLayout";
+    ViewData["Title"] = "Usuarios - Admin";
+}
+
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12">
+    <div class="mb-8 flex items-center justify-between">
+        <div>
+            <h1 class="font-headline-md text-headline-md text-primary">Gestión de Usuarios</h1>
+            <p class="text-on-surface-variant">Promover o remover administradores desde el panel.</p>
+        </div>
+        <div class="flex items-center gap-4">
+            <a class="bg-secondary text-on-secondary px-6 py-3" asp-controller="Admin" asp-action="CrearAdministrador">Agregar Administrador</a>
+            <a class="bg-primary text-on-primary px-6 py-3" asp-controller="Admin" asp-action="Index">Volver al panel</a>
+        </div>
+    </div>
+
+    <div class="overflow-x-auto bg-surface-container-lowest border border-outline-variant">
+        <table class="w-full text-left">
+            <thead class="bg-primary text-on-primary">
+                <tr>
+                    <th class="py-4 px-6">Nombre</th>
+                    <th class="py-4 px-6">Correo</th>
+                    <th class="py-4 px-6 text-center">Rol</th>
+                    <th class="py-4 px-6 text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var u in Model)
+                {
+                    <tr class="border-b border-outline-variant">
+                        <td class="py-4 px-6">@u.Nombres @u.Apellidos</td>
+                        <td class="py-4 px-6">@u.Correo</td>
+                        <td class="py-4 px-6 text-center">@u.NombreRol</td>
+                        <td class="py-4 px-6 text-center">
+                            <div class="flex items-center justify-center gap-2">
+                                @if (u.NombreRol != "Administrador")
+                                {
+                                    <form asp-controller="Admin" asp-action="PromoverAdministrador" method="post" class="inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@u.IdUsuario" />
+                                        <button type="submit" class="bg-primary text-on-primary px-3 py-1">Promover a Admin</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form asp-controller="Admin" asp-action="RemoverAdministrador" method="post" class="inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@u.IdUsuario" />
+                                        <button type="submit" class="bg-error text-on-error px-3 py-1">Remover Admin</button>
+                                    </form>
+                                }
+
+                                @* Activar / Desactivar usuario *@
+                                @if (u.Correo != "evert@gmail.com")
+                                {
+                                    if (u.Estado)
+                                    {
+                                        <form asp-controller="Admin" asp-action="DesactivarUsuario" method="post" class="inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@u.IdUsuario" />
+                                            <button type="submit" class="bg-amber-500 text-on-primary px-3 py-1">Desactivar</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <form asp-controller="Admin" asp-action="ActivarUsuario" method="post" class="inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@u.IdUsuario" />
+                                            <button type="submit" class="bg-primary text-on-primary px-3 py-1">Activar</button>
+                                        </form>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="text-sm text-on-surface-variant">Cuenta principal protegida</span>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @{
+        var currentPage = ViewBag.CurrentPage as int? ?? 1;
+        var pageSize = ViewBag.PageSize as int? ?? 10;
+        var totalPages = ViewBag.TotalPages as int? ?? 1;
+        var totalCount = ViewBag.TotalCount as int? ?? 0;
+        var startIndex = totalCount == 0 ? 0 : ((currentPage - 1) * pageSize) + 1;
+        var endIndex = Math.Min(currentPage * pageSize, totalCount);
+    }
+
+    <div class="mt-4 flex items-center justify-between">
+        <div class="text-sm text-on-surface-variant">Mostrando @startIndex - @endIndex de @totalCount usuarios</div>
+        <div class="flex items-center gap-2">
+            @if (currentPage > 1)
+            {
+                <a asp-controller="Admin" asp-action="Usuarios" asp-route-page="@(currentPage-1)" asp-route-pageSize="@pageSize" class="px-3 py-1 border rounded hover:bg-surface">&larr; Anterior</a>
+            }
+            else
+            {
+                <span class="px-3 py-1 border rounded opacity-50">&larr; Anterior</span>
+            }
+
+            <div class="hidden md:flex items-center gap-1">
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    if (i == currentPage)
+                    {
+                        <span class="px-3 py-1 border rounded bg-primary text-on-primary font-bold">@i</span>
+                    }
+                    else
+                    {
+                        <a asp-controller="Admin" asp-action="Usuarios" asp-route-page="@i" asp-route-pageSize="@pageSize" class="px-3 py-1 border rounded hover:bg-surface">@i</a>
+                    }
+                }
+            </div>
+
+            @if (currentPage < totalPages)
+            {
+                <a asp-controller="Admin" asp-action="Usuarios" asp-route-page="@(currentPage+1)" asp-route-pageSize="@pageSize" class="px-3 py-1 border rounded hover:bg-surface">Siguiente &rarr;</a>
+            }
+            else
+            {
+                <span class="px-3 py-1 border rounded opacity-50">Siguiente &rarr;</span>
+            }
+        </div>
+    </div>
+
+</main>

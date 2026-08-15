@@ -1,0 +1,168 @@
+@using LICORIX_PROYECT.Services
+@using LICORIX_PROYECT.Models
+@inject SesionUsuario Sesion
+@inject CarritoSesion Carrito
+
+@{
+    var usuario = Sesion.Obtener();
+    var cantCarrito = Carrito.CantidadTotal();
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    string navActivo(string c) => controller == c ? "text-primary font-bold border-b-2 border-primary pb-1 font-label-caps text-label-caps" : "text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors duration-200 font-label-caps text-label-caps";
+}
+
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] | Licorix Premium Spirits</title>
+
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="/js/tailwind.config.js"></script>
+
+    
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Hanken+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/inicio.css" />
+</head>
+<body class="bg-surface font-body-md">
+    
+    <header class="bg-surface docked full-width top-0 sticky z-50 border-b border-outline-variant">
+        <div class="flex flex-col w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+            <div class="flex items-center justify-between py-base md:py-6 gap-gutter">
+                <a class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary tracking-tighter" asp-controller="Inicio" asp-action="Index">Licorix</a>
+
+                <nav class="hidden md:flex items-center gap-8">
+                    <a class="@navActivo("Inicio")" asp-controller="Inicio" asp-action="Index">INICIO</a>
+                    <a class="@navActivo("Catalogo")" asp-controller="Catalogo" asp-action="Index">CATÁLOGO</a>
+                    <a class="@navActivo("Ofertas")" asp-controller="Ofertas" asp-action="Index">OFERTAS</a>
+                    <a class="@navActivo("NuevosIngresos")" asp-controller="NuevosIngresos" asp-action="Index">NOVEDADES</a>
+                    <a class="@navActivo("Eventos")" asp-controller="Eventos" asp-action="Index">EVENTOS</a>
+                    <a class="@navActivo("SobreNosotros")" asp-controller="SobreNosotros" asp-action="Index">NOSOTROS</a>
+                    @if (usuario != null && usuario.EsAdmin)
+                    {
+                        <a class="text-secondary font-label-caps text-label-caps border-b-2 border-secondary pb-1" asp-controller="Admin" asp-action="Index">PANEL ADMIN</a>
+                    }
+                </nav>
+
+                <div class="flex items-center gap-4">
+                    @if (usuario != null)
+                    {
+                        <span class="hidden md:inline text-on-surface-variant font-label-caps text-label-caps">Hola, @(usuario.Nombres.Split(' ')[0])</span>
+                        <form asp-controller="Cuenta" asp-action="Logout" method="post" class="inline">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="material-symbols-outlined text-primary p-2 hover:opacity-70" title="Cerrar sesión">logout</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a class="material-symbols-outlined text-primary p-2" asp-controller="Cuenta" asp-action="Login" title="Iniciar sesión">person</a>
+                    }
+
+                    <a class="material-symbols-outlined text-primary p-2 relative" asp-controller="Carrito" asp-action="Index" title="Mi carrito">
+                        shopping_cart
+                        @if (cantCarrito > 0)
+                        {
+                            <span class="absolute -top-1 -right-1 bg-secondary text-on-secondary text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold">@cantCarrito</span>
+                        }
+                    </a>
+
+                    <button class="md:hidden material-symbols-outlined text-primary p-2" onclick="document.getElementById('mobile-nav').classList.toggle('hidden')">menu</button>
+                </div>
+            </div>
+
+            <nav id="mobile-nav" class="hidden md:hidden flex-col gap-2 pb-4 border-t border-outline-variant pt-4">
+                <a class="@navActivo("Inicio")" asp-controller="Inicio" asp-action="Index">INICIO</a>
+                <a class="@navActivo("Catalogo")" asp-controller="Catalogo" asp-action="Index">CATÁLOGO</a>
+                <a class="@navActivo("Ofertas")" asp-controller="Ofertas" asp-action="Index">OFERTAS</a>
+                <a class="@navActivo("NuevosIngresos")" asp-controller="NuevosIngresos" asp-action="Index">NOVEDADES</a>
+                <a class="@navActivo("Eventos")" asp-controller="Eventos" asp-action="Index">EVENTOS</a>
+                <a class="@navActivo("SobreNosotros")" asp-controller="SobreNosotros" asp-action="Index">NOSOTROS</a>
+                @if (usuario != null && usuario.EsAdmin)
+                {
+                    <a class="text-secondary font-label-caps text-label-caps" asp-controller="Admin" asp-action="Index">PANEL ADMIN</a>
+                }
+            </nav>
+        </div>
+    </header>
+
+    
+    @if (TempData["Exito"] != null)
+    {
+        <div id="toast-exito" class="fixed top-24 right-6 z-[100] bg-green-50 border-l-4 border-green-600 px-6 py-3 shadow-lg flex items-center gap-3 max-w-sm">
+            <span class="material-symbols-outlined text-green-700">check_circle</span>
+            <span class="text-green-900 font-body-md">@TempData["Exito"]</span>
+            <button onclick="document.getElementById('toast-exito').remove()" class="ml-auto material-symbols-outlined text-green-700">close</button>
+        </div>
+    }
+    @if (TempData["Aviso"] != null)
+    {
+        <div id="toast-aviso" class="fixed top-24 right-6 z-[100] bg-amber-50 border-l-4 border-amber-600 px-6 py-3 shadow-lg flex items-center gap-3 max-w-sm">
+            <span class="material-symbols-outlined text-amber-700">warning</span>
+            <span class="text-amber-900 font-body-md">@TempData["Aviso"]</span>
+            <button onclick="document.getElementById('toast-aviso').remove()" class="ml-auto material-symbols-outlined text-amber-700">close</button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        var errorMessage = TempData["Error"]?.ToString();
+        if (!string.Equals(errorMessage, "Error al obtener productos paginados desde la base de datos. Asegúrate de ejecutar LICOREX-PROYECT.sql. Mostrando productos sin paginación. (Could not find stored procedure 'sp_ListarProductosPaginado'.)", StringComparison.Ordinal))
+        {
+            <div id="toast-error" class="fixed top-24 right-6 z-[100] bg-red-50 border-l-4 border-red-600 px-6 py-3 shadow-lg flex items-center gap-3 max-w-sm">
+                <span class="material-symbols-outlined text-red-700">error</span>
+                <span class="text-red-900 font-body-md">@errorMessage</span>
+                <button onclick="document.getElementById('toast-error').remove()" class="ml-auto material-symbols-outlined text-red-700">close</button>
+            </div>
+        }
+    }
+
+    <main>
+        @RenderBody()
+    </main>
+
+    
+    <footer class="bg-primary-container full-width bottom-0 py-16 px-margin-mobile md:px-margin-desktop mt-24">
+        <div class="max-w-container-max mx-auto flex flex-col items-center gap-12">
+            <div class="flex flex-col md:flex-row justify-between w-full border-b border-on-primary-container/20 pb-12 gap-8">
+                <div class="flex flex-col gap-4">
+                    <span class="font-display-lg text-headline-md text-on-primary">Licorix</span>
+                    <p class="text-on-primary-container max-w-xs font-body-md">Curaduría experta de bebidas espirituosas para los paladares más exigentes del mundo.</p>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+                    <div class="flex flex-col gap-3">
+                        <h4 class="font-label-caps text-label-caps text-on-primary">COMPAÑÍA</h4>
+                        <a class="text-on-primary-container hover:text-secondary-container transition-colors font-body-md" href="#">Política de Privacidad</a>
+                        <a class="text-on-primary-container hover:text-secondary-container transition-colors font-body-md" href="#">Términos de Servicio</a>
+                    </div>
+                    <div class="flex flex-col gap-3">
+                        <h4 class="font-label-caps text-label-caps text-on-primary">SOPORTE</h4>
+                        <a class="text-on-primary-container hover:text-secondary-container transition-colors font-body-md" asp-controller="Pago_y_Envio" asp-action="Index">Información de Envío</a>
+                        <a class="text-on-primary-container hover:text-secondary-container transition-colors font-body-md" href="#">Contáctanos</a>
+                    </div>
+                    <div class="flex flex-col gap-3">
+                        <h4 class="font-label-caps text-label-caps text-on-primary">EXPLORA</h4>
+                        <a class="text-on-primary-container hover:text-secondary-container transition-colors font-body-md" asp-controller="Catalogo" asp-action="Index">Catálogo</a>
+                        <a class="text-on-primary-container hover:text-secondary-container transition-colors font-body-md" asp-controller="Ofertas" asp-action="Index">Ofertas</a>
+                        <a class="text-on-primary-container hover:text-secondary-container transition-colors font-body-md" asp-controller="Eventos" asp-action="Index">Eventos</a>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full flex flex-col md:flex-row items-center justify-between gap-4 text-center">
+                <p class="text-on-primary-container font-label-caps text-label-caps opacity-70">
+                    © 2026 Licorix Spirits Premium. Todos los derechos reservados. Por favor, beba con responsabilidad.
+                </p>
+                <div class="flex gap-6">
+                    <span class="material-symbols-outlined text-on-primary-container cursor-pointer hover:text-secondary-container transition-colors">share</span>
+                    <span class="material-symbols-outlined text-on-primary-container cursor-pointer hover:text-secondary-container transition-colors">mail</span>
+                    <span class="material-symbols-outlined text-on-primary-container cursor-pointer hover:text-secondary-container transition-colors">language</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+    <script src="/js/carrito.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

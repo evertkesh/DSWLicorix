@@ -1,0 +1,77 @@
+@model LICORIX_PROYECT.Models.Promocion
+@{
+    Layout = "_LicorixLayout";
+    ViewData["Title"] = "Crear Promoción - Admin";
+    var productos = ViewBag.Productos as List<LICORIX_PROYECT.Models.Producto> ?? new List<LICORIX_PROYECT.Models.Producto>();
+}
+
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12">
+    <div class="mb-8 flex items-center justify-between">
+        <div>
+            <h1 class="font-headline-md text-headline-md text-primary">Crear nueva Promoción</h1>
+            <p class="text-on-surface-variant">Define la promoción y asocia los productos que formarán parte de ella.</p>
+        </div>
+        <a class="bg-primary text-on-primary px-6 py-3" asp-controller="Admin" asp-action="Ofertas">Volver a Ofertas</a>
+    </div>
+
+    <form asp-controller="Admin" asp-action="CrearOferta" method="post">
+        @Html.AntiForgeryToken()
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-sm font-label-caps">Nombre</label>
+                <input name="Nombre" value="@Model.Nombre" class="w-full border px-3 py-2" />
+            </div>
+            <div>
+                <label class="block text-sm font-label-caps">Tipo de Descuento</label>
+                <div class="flex items-center gap-4 mt-2">
+                    <label><input type="radio" name="TipoDescuento" value="p" checked="@(Model.TipoDescuento=="p")" /> Porcentaje (%)</label>
+                    <label><input type="radio" name="TipoDescuento" value="m" checked="@(Model.TipoDescuento=="m")" /> Monto (S/)</label>
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-label-caps">Valor del Descuento</label>
+                <input name="ValorDescuento" value="@Model.ValorDescuento" type="number" step="0.01" class="w-full border px-3 py-2" />
+            </div>
+            <div>
+                <label class="block text-sm font-label-caps">Estado</label>
+                <select name="Estado" class="w-full border px-3 py-2">
+                    <option value="1" selected>Activo</option>
+                    <option value="0">Inactivo</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-label-caps">Fecha Inicio</label>
+                <input name="FechaInicio" value="@Model.FechaInicio.ToString("yyyy-MM-dd")" type="date" class="w-full border px-3 py-2" />
+            </div>
+            <div>
+                <label class="block text-sm font-label-caps">Fecha Fin</label>
+                <input name="FechaFin" value="@Model.FechaFin.ToString("yyyy-MM-dd")" type="date" class="w-full border px-3 py-2" />
+            </div>
+
+            <div class="md:col-span-2">
+                <label class="block text-sm font-label-caps">Descripción</label>
+                <textarea name="Descripcion" class="w-full border px-3 py-2">@Model.Descripcion</textarea>
+            </div>
+
+            <div class="md:col-span-2">
+                <label class="block text-sm font-label-caps">Productos (selecciona los que aplican)</label>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2 max-h-64 overflow-y-auto border p-3">
+                    @foreach (var p in productos)
+                    {
+                            var selected = (ViewBag.ProductosSeleccionados as List<int>)?.Contains(p.IdProducto) == true;
+                            <label class="flex items-center gap-2">
+                                <input type="checkbox" name="productosSeleccionados" value="@p.IdProducto" @(selected ? "checked" : "") />
+                                <img src="@(Url.Content(ImagenHelper.Url(p.ImagenURL, p.Nombre)))" alt="@p.Nombre" class="w-10 h-10 object-cover" />
+                                <span class="text-sm">@p.Nombre</span>
+                            </label>
+                        }
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-6">
+            <button type="submit" class="bg-primary text-on-primary px-6 py-3">Crear Promoción</button>
+        </div>
+    </form>
+</main>

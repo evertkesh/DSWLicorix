@@ -1,0 +1,117 @@
+@model LICORIX_PROYECT.Models.ViewModels.RegistroViewModel
+@{
+    Layout = "_LicorixLayout";
+    ViewData["Title"] = "Crear Cuenta";
+}
+
+<section class="py-16 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-start">
+        
+        <div class="md:col-span-5 md:sticky md:top-32">
+            <span class="font-label-caps text-label-caps text-secondary mb-4 block">CREA TU CUENTA</span>
+            <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-6 leading-tight">Únete al club<br />Licorix.</h1>
+            <p class="font-body-lg text-body-lg text-on-surface-variant mb-8 max-w-md">Crea tu cuenta en menos de un minuto y disfruta de beneficios exclusivos: lanzamientos anticipados, catas privadas y descuentos para miembros.</p>
+            <ul class="space-y-4">
+                <li class="flex items-start gap-3">
+                    <span class="material-symbols-outlined text-secondary mt-1">check_circle</span>
+                    <span class="font-body-md">Acceso a catas privadas y eventos exclusivos</span>
+                </li>
+                <li class="flex items-start gap-3">
+                    <span class="material-symbols-outlined text-secondary mt-1">check_circle</span>
+                    <span class="font-body-md">Notificaciones de lanzamientos y ofertas limitadas</span>
+                </li>
+                <li class="flex items-start gap-3">
+                    <span class="material-symbols-outlined text-secondary mt-1">check_circle</span>
+                    <span class="font-body-md">Lista de deseos persistente en todos tus dispositivos</span>
+                </li>
+                <li class="flex items-start gap-3">
+                    <span class="material-symbols-outlined text-secondary mt-1">check_circle</span>
+                    <span class="font-body-md">Soporte concierge dedicado 24/7</span>
+                </li>
+            </ul>
+        </div>
+
+        
+        <div class="md:col-span-7">
+            <div class="bg-surface-container-lowest border border-outline-variant p-8 md:p-12">
+                <h2 class="font-headline-md text-headline-md text-primary mb-2">Datos de Registro</h2>
+                <p class="text-on-surface-variant font-body-md mb-8">Completa tus datos. Tu cuenta se crea con el rol de Cliente.</p>
+
+                @if (!string.IsNullOrEmpty(Model.MensajeError))
+                {
+                    <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-600 flex items-start gap-3">
+                        <span class="material-symbols-outlined text-red-700">error</span>
+                        <span class="text-red-900 font-body-md">@Model.MensajeError</span>
+                    </div>
+                }
+
+                <form asp-controller="Cuenta" asp-action="Registro" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter mb-6">
+                        <div class="space-y-1">
+                            <label asp-for="Nombres" class="font-label-caps text-label-caps text-on-surface-variant"></label>
+                            <input asp-for="Nombres" class="w-full border-0 border-b border-outline-variant bg-transparent py-2 focus:border-primary transition-colors" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+"
+       title="Ingrese únicamente letras y espacios" />
+                            <span asp-validation-for="Nombres" class="text-error text-sm"></span>
+                        </div>
+                        <div class="space-y-1">
+                            <label asp-for="Apellidos" class="font-label-caps text-label-caps text-on-surface-variant"></label>
+                            <input asp-for="Apellidos" class="w-full border-0 border-b border-outline-variant bg-transparent py-2 focus:border-primary transition-colors" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+"
+       title="Ingrese únicamente letras y espacios" />
+                            <span asp-validation-for="Apellidos" class="text-error text-sm"></span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1 mb-6">
+                        <label asp-for="Correo" class="font-label-caps text-label-caps text-on-surface-variant"></label>
+                        <input asp-for="Correo" type="email" class="w-full border-0 border-b border-outline-variant bg-transparent py-2 focus:border-primary transition-colors" />
+                        <span asp-validation-for="Correo" class="text-error text-sm"></span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter mb-6">
+                        <div class="space-y-1">
+                            <label asp-for="Contrasena" class="font-label-caps text-label-caps text-on-surface-variant"></label>
+                            <input asp-for="Contrasena" type="password" class="w-full border-0 border-b border-outline-variant bg-transparent py-2 focus:border-primary transition-colors" />
+                            <span asp-validation-for="Contrasena" class="text-error text-sm"></span>
+                        </div>
+                        <div class="space-y-1">
+                            <label asp-for="ConfirmarContrasena" class="font-label-caps text-label-caps text-on-surface-variant"></label>
+                            <input asp-for="ConfirmarContrasena" type="password" class="w-full border-0 border-b border-outline-variant bg-transparent py-2 focus:border-primary transition-colors" />
+                            <span asp-validation-for="ConfirmarContrasena" class="text-error text-sm"></span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter mb-6">
+                        <div class="space-y-1">
+                            <label asp-for="Telefono" class="font-label-caps text-label-caps text-on-surface-variant"></label>
+                            <input asp-for="Telefono" class="w-full border-0 border-b border-outline-variant bg-transparent py-2 focus:border-primary transition-colors" />
+                        </div>
+                        <div class="space-y-1">
+                            <label asp-for="Direccion" class="font-label-caps text-label-caps text-on-surface-variant"></label>
+                            <input asp-for="Direccion" class="w-full border-0 border-b border-outline-variant bg-transparent py-2 focus:border-primary transition-colors" />
+                        </div>
+                    </div>
+
+                    <label class="flex items-start gap-3 mb-6 cursor-pointer">
+                        <input type="checkbox" required class="mt-1 w-4 h-4 border-primary text-primary focus:ring-secondary rounded-none" />
+                        <span class="font-body-md text-sm text-on-surface-variant">Acepto los <a href="#" class="text-primary underline">términos y condiciones</a> y la <a href="#" class="text-primary underline">política de privacidad</a> de Licorix.</span>
+                    </label>
+
+                    <button type="submit" class="w-full bg-primary text-on-primary py-4 font-label-caps text-label-caps hover:bg-secondary hover:text-on-secondary transition-colors">
+                        CREAR MI CUENTA
+                    </button>
+
+                    <div class="text-center mt-6 text-sm font-body-md text-on-surface-variant">
+                        ¿Ya tienes cuenta?
+                        <a asp-controller="Cuenta" asp-action="Login" class="text-primary font-bold hover:underline ml-1">Iniciar sesión</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,33 @@
+        body {
+            background-color: #fbf9f8;
+            color: #1b1c1c;
+            overflow-x: hidden;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .text-label-caps { font-family: 'Hanken Grotesk'; font-size: 12px; line-height: 1; letter-spacing: 0.1em; font-weight: 600; text-transform: uppercase; }
+        .font-headline-sm { font-family: 'Libre Caslon Text'; }
+        .font-body-md { font-family: 'Hanken Grotesk'; }
+        .font-display-lg { font-family: 'Libre Caslon Text'; }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .hover-lift { transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .hover-lift:hover { transform: translateY(-4px); }
+        .event-carousel-slide {
+            flex: 0 0 100%;
+        }
+
+        .event-carousel-dot {
+            width: 2.75rem;
+            height: 0.25rem;
+            background: rgba(255, 255, 255, 0.4);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .event-carousel-dot[aria-current="true"] {
+            background: #ffffff;
+            transform: scaleX(1.12);
+        }

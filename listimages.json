@@ -1,0 +1,27 @@
+﻿
+
+StatusCode        : 200
+StatusDescription : OK
+Content           : [{"idProducto":9,"nombre":"Absolut Original","imagenURL":"/
+                    imagenes/productos/absolut.jpg"},{"idProducto":19,"nombre":
+                    "Aguardiente Antioque\u00F1o 
+                    Azul","imagenURL":"/imagenes/productos/Aguardiente_An...
+RawContent        : HTTP/1.1 200 OK
+                    Transfer-Encoding: chunked
+                    Content-Type: application/json; charset=utf-8
+                    Date: Thu, 13 Aug 2026 21:28:17 GMT
+                    Server: Kestrel
+                    
+                    [{"idProducto":9,"nombre":"Absolut Original","imagen...
+Forms             : 
+Headers           : {[Transfer-Encoding, chunked], [Content-Type, 
+                    application/json; charset=utf-8], [Date, Thu, 13 Aug 2026 
+                    21:28:17 GMT], [Server, Kestrel]}
+Images            : {}
+InputFields       : {}
+Links             : {}
+ParsedHtml        : 
+RawContentLength  : 2154
+
+
+

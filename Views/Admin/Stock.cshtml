@@ -1,0 +1,121 @@
+@model List<LICORIX_PROYECT.Models.Producto>
+@{
+    Layout = "_LicorixLayout";
+    ViewData["Title"] = "Gestión de Stock - Admin";
+}
+
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12">
+    <div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+            <span class="font-label-caps text-label-caps text-secondary mb-2 block">ADMIN</span>
+            <h1 class="font-headline-md text-headline-md text-primary">Gestión de Stock</h1>
+            <p class="font-body-md text-on-surface-variant mt-1">Actualiza el stock o repones productos agotados.</p>
+        </div>
+        <div class="flex items-center gap-4">
+            <a class="bg-secondary text-on-secondary px-6 py-3 font-label-caps text-label-caps tracking-widest hover:bg-secondary/90 transition-colors" asp-controller="Admin" asp-action="CrearProducto">Agregar Producto</a>
+            <a class="bg-primary text-on-primary px-6 py-3 font-label-caps text-label-caps tracking-widest hover:bg-secondary transition-colors" asp-controller="Admin" asp-action="Index">&larr; Volver al panel</a>
+        </div>
+    </div>
+
+    <div class="overflow-x-auto bg-surface-container-lowest border border-outline-variant">
+        <table class="w-full text-left">
+            <thead class="bg-primary text-on-primary">
+                <tr>
+                    <th class="py-4 px-6 font-label-caps text-label-caps uppercase tracking-widest">Producto</th>
+                    <th class="py-4 px-6 font-label-caps text-label-caps uppercase tracking-widest text-center">Stock actual</th>
+                    <th class="py-4 px-6 font-label-caps text-label-caps uppercase tracking-widest text-right">Precio (S/)</th>
+                    <th class="py-4 px-6 font-label-caps text-label-caps uppercase tracking-widest text-center">Poner en stock</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var p in Model)
+                {
+                    <tr class="border-b border-outline-variant @(p.Stock == 0 ? "bg-red-50" : p.Stock < 5 ? "bg-amber-50" : "")">
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-3">
+                                <img src="@(Url.Content(ImagenHelper.Url(p.ImagenURL, p.Nombre)))" class="w-12 h-12 object-cover" alt="@p.Nombre" />
+                                <div>
+                                    <p class="font-body-md text-body-md font-bold text-primary">@p.Nombre</p>
+                                    <p class="text-xs text-on-surface-variant">ID: @p.IdProducto</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="py-4 px-6 text-center">
+                            <form asp-controller="Admin" asp-action="ActualizarStock" method="post" class="inline-flex items-center gap-2">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@p.IdProducto" />
+                                <input type="number" name="stock" value="@p.Stock" min="0" class="w-20 border border-outline-variant bg-transparent text-center py-1 px-2 font-body-md" />
+                                <button type="submit" class="text-secondary hover:text-primary font-label-caps text-label-caps uppercase text-xs border border-secondary hover:border-primary px-3 py-1">Guardar</button>
+                            </form>
+                        </td>
+                        <td class="py-4 px-6 text-right font-body-md text-body-md">S/ @p.Precio.ToString("F2")</td>
+                        <td class="py-4 px-6 text-center">
+                            <form asp-controller="Admin" asp-action="PonerEnStock" method="post" class="inline-flex items-center gap-2">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@p.IdProducto" />
+                                <input type="number" name="cantidad" min="1" value="10" class="w-20 border border-outline-variant bg-transparent text-center py-1 px-2 font-body-md" />
+                                <button type="submit" class="bg-primary text-on-primary hover:bg-secondary px-3 py-1 font-label-caps text-label-caps uppercase text-xs">+ Reponer</button>
+                            </form>
+
+                            <div class="mt-2 flex gap-2 justify-center">
+                                <a class="bg-secondary text-on-secondary px-3 py-1 font-label-caps text-label-caps uppercase text-xs" asp-controller="Admin" asp-action="EditarProducto" asp-route-id="@p.IdProducto">Editar</a>
+                                <form asp-controller="Admin" asp-action="EliminarProducto" method="post" class="inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@p.IdProducto" />
+                                    <button type="submit" class="bg-error text-on-error px-3 py-1 font-label-caps text-label-caps uppercase text-xs">Eliminar</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @{
+        var currentPage = ViewBag.CurrentPage as int? ?? 1;
+        var pageSize = ViewBag.PageSize as int? ?? 10;
+        var totalPages = ViewBag.TotalPages as int? ?? 1;
+        var totalCount = ViewBag.TotalCount as int? ?? 0;
+        var startIndex = totalCount == 0 ? 0 : ((currentPage - 1) * pageSize) + 1;
+        var endIndex = Math.Min(currentPage * pageSize, totalCount);
+    }
+
+    <div class="mt-4 flex items-center justify-between">
+        <div class="text-sm text-on-surface-variant">Mostrando @startIndex - @endIndex de @totalCount productos</div>
+        <div class="flex items-center gap-2">
+            @if (currentPage > 1)
+            {
+                <a asp-controller="Admin" asp-action="Stock" asp-route-page="@(currentPage-1)" class="px-3 py-1 border rounded hover:bg-surface">&larr; Anterior</a>
+            }
+            else
+            {
+                <span class="px-3 py-1 border rounded opacity-50">&larr; Anterior</span>
+            }
+
+            <div class="hidden md:flex items-center gap-1">
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    if (i == currentPage)
+                    {
+                        <span class="px-3 py-1 border rounded bg-primary text-on-primary font-bold">@i</span>
+                    }
+                    else
+                    {
+                        <a asp-controller="Admin" asp-action="Stock" asp-route-page="@i" class="px-3 py-1 border rounded hover:bg-surface">@i</a>
+                    }
+                }
+            </div>
+
+            @if (currentPage < totalPages)
+            {
+                <a asp-controller="Admin" asp-action="Stock" asp-route-page="@(currentPage+1)" class="px-3 py-1 border rounded hover:bg-surface">Siguiente &rarr;</a>
+            }
+            else
+            {
+                <span class="px-3 py-1 border rounded opacity-50">Siguiente &rarr;</span>
+            }
+        </div>
+    </div>
+
+</main>

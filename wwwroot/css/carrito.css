@@ -1,0 +1,17 @@
+        body {
+            background-color: #fbf9f8;
+            color: #1b1c1c;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .luxury-line {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #c4c7c7, transparent);
+        }
+        input:focus {
+            outline: none;
+            border-color: #000000 !important;
+            box-shadow: none !important;
+        }

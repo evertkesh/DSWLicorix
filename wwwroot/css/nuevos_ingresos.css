@@ -1,0 +1,13 @@
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            vertical-align: middle;
+        }
+        .text-label-caps { letter-spacing: 0.1em; text-transform: uppercase; }
+        .product-card:hover .product-image { transform: scale(1.03); }
+        .glass-panel {
+            background: rgba(251, 249, 248, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }

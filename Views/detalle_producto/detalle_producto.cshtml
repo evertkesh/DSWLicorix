@@ -1,0 +1,150 @@
+@model LICORIX_PROYECT.Models.ViewModels.DetalleProductoViewModel
+@{
+    Layout = "_LicorixLayout";
+    ViewData["Title"] = Model.Producto.Nombre;
+    var p = Model.Producto;
+}
+
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12 md:py-20">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+        
+        <div class="lg:col-span-7 flex flex-col gap-6">
+            <div class="aspect-[4/5] bg-surface-container-low overflow-hidden border border-outline-variant relative group">
+                <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="@(Url.Content(ImagenHelper.Url(p.ImagenURL, p.Nombre)))" alt="@p.Nombre" />
+                @if (p.Destacado)
+                {
+                    <div class="absolute top-6 right-6">
+                        <span class="bg-surface px-3 py-1 font-label-caps text-label-caps text-on-surface border border-outline-variant uppercase">Edición Limitada</span>
+                    </div>
+                }
+            </div>
+            
+            <div class="flex gap-4 overflow-x-auto scroll-hide pb-2">
+                <div class="w-24 h-24 flex-shrink-0 border-2 border-primary overflow-hidden">
+                    <img class="w-full h-full object-cover" src="@(Url.Content(ImagenHelper.Url(p.ImagenURL, p.Nombre + " - 1")))" alt="@p.Nombre - detalle" />
+                </div>
+                <div class="w-24 h-24 flex-shrink-0 border border-outline-variant overflow-hidden hover:border-primary transition-colors cursor-pointer">
+                    <img class="w-full h-full object-cover" src="@(Url.Content(ImagenHelper.Url(p.ImagenURL, p.Nombre + " - 2")))" alt="@p.Nombre - lifestyle" />
+                </div>
+                <div class="w-24 h-24 flex-shrink-0 border border-outline-variant overflow-hidden hover:border-primary transition-colors cursor-pointer">
+                    <img class="w-full h-full object-cover" src="@(Url.Content(ImagenHelper.Url(p.ImagenURL, p.Nombre + " - 3")))" alt="@p.Nombre - etiqueta" />
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="lg:col-span-5 flex flex-col">
+            <nav class="mb-6 flex gap-2 font-label-caps text-label-caps text-on-surface-variant uppercase">
+                <a class="hover:text-primary" asp-controller="Catalogo" asp-action="Index">Catálogo</a>
+                <span>/</span>
+                @if (!string.IsNullOrEmpty(Model.NombreCategoria))
+                {
+                    <a class="hover:text-primary" asp-controller="Catalogo" asp-action="Index" asp-route-idCategoria="@p.IdCategoria">@Model.NombreCategoria</a>
+                    <span>/</span>
+                }
+                <span class="text-primary">@p.Nombre</span>
+            </nav>
+            <h1 class="font-headline-md text-headline-md mb-2">@p.Nombre</h1>
+            <p class="font-label-caps text-label-caps text-secondary tracking-widest mb-6">
+                @(string.IsNullOrEmpty(Model.NombreMarca) ? "EDICIÓN ESPECIAL" : Model.NombreMarca.ToUpper())
+            </p>
+            <div class="font-display-lg text-display-lg mb-8 text-primary">S/ @p.Precio.ToString("F2")</div>
+
+            <div class="space-y-6 mb-10">
+                <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                    @(string.IsNullOrEmpty(p.Descripcion) ? "Una cuidada selección de nuestra cava privada. Cada botella es revisada por nuestros expertos antes de ser ofrecida." : p.Descripcion)
+                </p>
+                <div class="flex items-center gap-3 p-4 bg-surface-container-lowest border border-outline-variant">
+                    <div class="relative flex h-3 w-3">
+                        @if (p.Stock > 5)
+                        {
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                        }
+                        else if (p.Stock > 0)
+                        {
+                            <span class="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+                        }
+                        else
+                        {
+                            <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                        }
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-label-caps text-[10px] text-on-surface-variant uppercase">Stock en Tiempo Real</span>
+                        <span class="font-body-md text-body-md font-bold @(p.Stock > 5 ? "text-green-700" : p.Stock > 0 ? "text-amber-700" : "text-red-700")">
+                            @(p.Stock > 0 ? $"En Stock: {p.Stock} unidades" : "Agotado")
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            
+            @if (p.Stock > 0)
+            {
+                <form asp-controller="Carrito" asp-action="Agregar" method="post" class="flex flex-col gap-4 mb-8">
+                    <input type="hidden" name="id" value="@p.IdProducto" />
+                    <div class="flex items-center gap-gutter">
+                        <div class="flex items-center border border-primary h-14">
+                            <button type="button" class="px-4 hover:bg-surface-container transition-colors h-full flex items-center" onclick="document.getElementById('qty-input').stepDown()">
+                                <span class="material-symbols-outlined text-sm">remove</span>
+                            </button>
+                            <input id="qty-input" name="cantidad" class="w-12 text-center bg-transparent border-none focus:ring-0 font-body-md font-bold" type="number" value="1" min="1" max="@p.Stock" />
+                            <button type="button" class="px-4 hover:bg-surface-container transition-colors h-full flex items-center" onclick="document.getElementById('qty-input').stepUp()">
+                                <span class="material-symbols-outlined text-sm">add</span>
+                            </button>
+                        </div>
+                        <button type="submit" class="flex-grow bg-primary text-on-primary h-14 font-label-caps text-label-caps flex items-center justify-center gap-2 hover:opacity-90 transition-all active:scale-[0.98]">
+                            <span class="material-symbols-outlined">shopping_bag</span>
+                            AÑADIR AL CARRITO
+                        </button>
+                    </div>
+                </form>
+            }
+            else
+            {
+                <div class="mb-8 p-4 bg-red-50 border-l-4 border-error text-center">
+                    <p class="text-error font-label-caps text-label-caps">PRODUCTO AGOTADO</p>
+                    <p class="text-sm text-on-surface-variant mt-1">Pronto volveremos a tener stock.</p>
+                </div>
+            }
+
+            <a class="w-full border border-primary h-14 font-label-caps text-label-caps flex items-center justify-center gap-2 hover:bg-surface-container-low transition-all" href="#">
+                <span class="material-symbols-outlined">favorite</span>
+                LISTA DE DESEOS
+            </a>
+
+            
+            <div class="grid grid-cols-2 gap-4 border-t border-outline-variant pt-8 mt-6">
+                <div class="flex items-center gap-2 text-on-surface-variant">
+                    <span class="material-symbols-outlined text-primary">local_shipping</span>
+                    <span class="font-label-caps text-[10px]">ENVÍO PREMIUM 24H</span>
+                </div>
+                <div class="flex items-center gap-2 text-on-surface-variant">
+                    <span class="material-symbols-outlined text-primary">verified_user</span>
+                    <span class="font-label-caps text-[10px]">ORIGEN CERTIFICADO</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    @if (Model.Relacionados.Any())
+    {
+        <section class="mt-24 border-t border-outline-variant pt-16">
+            <h2 class="font-headline-md text-headline-md text-primary mb-8">También te podría interesar</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-gutter">
+                @foreach (var r in Model.Relacionados)
+                {
+                    <a class="group block" asp-controller="DetalleProducto" asp-action="Index" asp-route-id="@r.IdProducto">
+                        <div class="aspect-[3/4] bg-surface-container-low mb-3 overflow-hidden">
+                            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="@(Url.Content(ImagenHelper.Url(r.ImagenURL, r.Nombre)))" alt="@r.Nombre" />
+                        </div>
+                        <h3 class="font-headline-sm text-sm text-primary group-hover:text-secondary transition-colors">@r.Nombre</h3>
+                        <p class="font-bold text-primary mt-1">S/ @r.Precio.ToString("F2")</p>
+                    </a>
+                }
+            </div>
+        </section>
+    }
+</main>
