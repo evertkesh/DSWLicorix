@@ -1,10 +1,16 @@
 using LICORIX_PROYECT.Data;
 using LICORIX_PROYECT.Data.Interfaces;
 using LICORIX_PROYECT.Services;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+});
 
 builder.Services.AddSingleton<ConexionBD>();
 
@@ -23,6 +29,10 @@ builder.Services.AddSession(o =>
     o.Cookie.Name = "Licorix.Session";
     o.Cookie.HttpOnly = true;
     o.Cookie.IsEssential = true;
+    o.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
+        ? CookieSecurePolicy.SameAsRequest
+        : CookieSecurePolicy.Always;
+    o.Cookie.SameSite = SameSiteMode.Lax;
 });
 
 builder.Services.AddScoped<CarritoSesion>();
@@ -30,10 +40,13 @@ builder.Services.AddScoped<SesionUsuario>();
 
 builder.Services.AddHttpClient("api", c =>
 {
-    c.BaseAddress = new Uri("https://localhost:7xxx/");
+    var apiBaseUrl = builder.Configuration["Api:BaseUrl"] ?? "http://localhost/";
+    c.BaseAddress = new Uri(apiBaseUrl, UriKind.Absolute);
 });
 
 var app = builder.Build();
+
+app.UseForwardedHeaders();
 
 if (!app.Environment.IsDevelopment())
 {
@@ -52,5 +65,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
 
 app.Run();

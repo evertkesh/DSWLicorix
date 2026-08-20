@@ -34,7 +34,7 @@ public class CategoriaRepositorio : ICategoriaRepositorio
                             IdCategoria = dr.GetInt32(dr.GetOrdinal("IdCategoria")),
                             Nombre = dr.GetString(dr.GetOrdinal("Nombre")),
                             Descripcion = dr.IsDBNull(dr.GetOrdinal("Descripcion")) ? string.Empty : dr.GetString(dr.GetOrdinal("Descripcion")),
-                            ImagenURL = dr.IsDBNull(dr.GetOrdinal("ImagenURL")) ? "/img/categorias/default.png" : dr.GetString(dr.GetOrdinal("ImagenURL")),
+                            ImagenURL = dr.IsDBNull(dr.GetOrdinal("ImagenURL")) ? string.Empty : dr.GetString(dr.GetOrdinal("ImagenURL")),
                             Estado = dr.GetBoolean(dr.GetOrdinal("Estado"))
                         });
                     }

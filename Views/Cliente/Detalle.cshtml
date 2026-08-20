@@ -2,7 +2,6 @@
 @{
     Layout = "_LicorixLayout";
     ViewData["Title"] = Model.Nombre;
-    string Img(string? url, string nombre) => string.IsNullOrEmpty(url) ? $"https://placehold.co/600x800/1c1b1b/fed65b?text={Uri.EscapeDataString(nombre)}&font=oswald" : url;
 }
 
 <section class="py-16 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
@@ -14,7 +13,7 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
         <div class="aspect-[4/5] bg-surface-container-low border border-outline-variant overflow-hidden">
-            <img class="w-full h-full object-cover" src="@Img(Model.ImagenURL, Model.Nombre)" alt="@Model.Nombre" />
+            <img class="w-full h-full object-cover" src="@(Url.Content(ImagenHelper.Url(Model.ImagenURL, Model.Nombre)))" alt="@Model.Nombre" />
         </div>
         <div>
             <h1 class="font-headline-md text-headline-md mb-2">@Model.Nombre</h1>

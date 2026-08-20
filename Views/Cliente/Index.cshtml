@@ -2,8 +2,6 @@
 @{
     Layout = "_LicorixLayout";
     ViewData["Title"] = "Demo API - Cliente";
-    string Placeholder(string nombre) => $"https://placehold.co/600x800/1c1b1b/fed65b?text={Uri.EscapeDataString(nombre)}&font=oswald";
-    string Img(string? url, string nombre) => string.IsNullOrEmpty(url) ? Placeholder(nombre) : url;
 }
 
 <section class="py-16 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
@@ -31,7 +29,7 @@
                         {
                             <div class="absolute top-4 right-4 z-10 font-label-caps text-label-caps text-green-700 bg-white/90 px-2 py-1">STOCK</div>
                         }
-                        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="@Img(p.ImagenURL, p.Nombre)" alt="@p.Nombre" />
+                        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="@(Url.Content(ImagenHelper.Url(p.ImagenURL, p.Nombre)))" alt="@p.Nombre" />
                     </div>
                     <div class="space-y-1">
                         <p class="font-label-caps text-label-caps text-on-surface-variant">@(p.GraduacionAlcoholica)% ALC. VOL.</p>

@@ -95,6 +95,12 @@ _ReSharper*/
 # Azure / VS Publish profiles
 *.azurepubxml
 *.azurepubxml.user
+*.publishsettings
+*.pfx
+*.cer
+*.zip
+.env
+.env.*
 
 # Misc
 *.swp

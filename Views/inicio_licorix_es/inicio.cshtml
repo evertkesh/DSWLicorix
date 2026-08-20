@@ -2,7 +2,9 @@
 @{
     Layout = "_LicorixLayout";
     ViewData["Title"] = "Licorix | Spirits Premium";
-}\n\n<section class="relative w-full h-[716px] md:h-[870px] overflow-hidden bg-primary-container">
+}
+
+<section class="relative w-full h-[716px] md:h-[870px] overflow-hidden bg-primary-container">
     <div class="absolute inset-0 opacity-80" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDPfLnnQxofL9PhibzYzdBX7rCvGkv5Plw6_KHIVMIuYtheD6Ge43yJU_HY9A9GSJ2hm2sC7zcy8axiPL7ox6HmikYamPj4ORslsdE-5ZNvWh29evssGsqLHplbKG3OuSFkOgbdPjeeRv4Dil34tpDljmvt2CDDxfl02sBmpFUsg2Ku8PJbYt5SdJIQpqloJcmQsqHMjiD3_m_UWOzT5_j8eZLEs3zAYnjCnWhijqHvq83nhyNzU9dA')"></div>
     <div class="relative h-full flex flex-col justify-center items-start px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto text-on-primary">
         <span class="font-label-caps text-label-caps text-secondary-container mb-4">EDICIÓN LIMITADA</span>
@@ -18,7 +20,9 @@
         <div class="w-12 h-1 bg-on-primary/30"></div>
         <div class="w-12 h-1 bg-on-primary/30"></div>
     </div>
-</section>\n\n@if (Model.Eventos.Any())
+</section>
+
+@if (Model.Eventos.Any())
 {
     <section class="event-banner-carousel bg-surface-container-low py-16" data-event-carousel data-interval="5000" aria-label="Carrusel de próximos eventos">
         <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
@@ -37,7 +41,7 @@
                     {
                         <article class="event-carousel-slide min-w-full grid grid-cols-1 lg:grid-cols-2" aria-label="@evento.Titulo">
                             <div class="relative h-80 lg:h-[430px] overflow-hidden">
-                                <img class="absolute inset-0 w-full h-full object-cover" src="@evento.ImagenURL" alt="@evento.Titulo" />
+                                <img class="absolute inset-0 w-full h-full object-cover" src="@(Url.Content(ImagenHelper.Url(evento.ImagenURL, evento.Titulo, "eventos")))" alt="@evento.Titulo" />
                                 <div class="absolute inset-0 bg-black/25"></div>
                             </div>
                             <div class="p-8 md:p-12 flex flex-col justify-center">
@@ -65,7 +69,9 @@
             </div>
         </div>
     </section>
-}\n\n<section class="py-20 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+}
+
+<section class="py-20 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
     <div class="flex justify-between items-end mb-12">
         <div>
             <h2 class="font-headline-md text-headline-md mb-2">Destacados del Mes</h2>
@@ -101,7 +107,9 @@
             </div>
         }
     </div>
-</section>\n\n<section class="py-10 bg-surface-container-low">
+</section>
+
+<section class="py-10 bg-surface-container-low">
     <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-20">
         <h2 class="font-headline-md text-headline-md mb-12 text-center">Explora por Categoría</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 h-[800px] md:h-[600px]">
@@ -146,7 +154,9 @@
             }
         </div>
     </div>
-</section>\n\n<section class="py-24 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+</section>
+
+<section class="py-24 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
     <div class="text-center mb-16">
         <h2 class="font-headline-md text-headline-md mb-4">Aprende a Mezclar</h2>
         <p class="text-on-surface-variant max-w-2xl mx-auto">Domina el arte de la coctelería con nuestras guías paso a paso. Recetas diseñadas por expertos para elevar tu experiencia en casa.</p>

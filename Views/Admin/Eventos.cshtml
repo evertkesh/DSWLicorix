@@ -20,7 +20,7 @@
                 @foreach (var e in Model)
                 {
                     <div class="bg-surface-container-lowest border @(e.Activo ? "border-outline-variant" : "border-red-400 opacity-60") p-6 flex flex-col md:flex-row gap-4">
-                        <img src="@e.ImagenURL" class="w-full md:w-40 h-32 object-cover" alt="@e.Titulo" />
+                        <img src="@(Url.Content(ImagenHelper.Url(e.ImagenURL, e.Titulo, "eventos")))" class="w-full md:w-40 h-32 object-cover" alt="@e.Titulo" />
                         <div class="flex-1">
                             <div class="flex justify-between items-start">
                                 <div>
